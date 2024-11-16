@@ -1,6 +1,6 @@
 ---
-title: Lets see what we can do with rehype pretty code
-description: Syntax highlighting, line numbers, line highlights, word highlights
+title: Arm Strong number Checker
+description: Code to check whether a number is an armstrong number or not using JSP and Html only
 date: 2024-03-04
 tags: ["code", "rehype pretty", "mdx"]
 published: true
@@ -12,96 +12,222 @@ published: true
 ## Editor-Grade Highlighting
 
 <span className="mix-blend-plus-lighter text-zinc-400/80">
-  Enjoy the accuracy and granularity of VS Code's syntax highlighting engine and
-  the popularity of its themes ecosystem — use any VS Code theme you want!
+    This code is used to check whether a number is an armstrong number using JSP and HTML only.
 </span>
 
-## Line Numbers and Line Highlighting
+## Index.html file
 
-Draw attention to a particular line of code.
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Armstrong Number Checker</title>
+    <style>
+        /* General Body Styling */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: #fff;
+        }
 
-```js {4} showLineNumbers
-import { useFloating } from "@floating-ui/react";
+        /* Form Container */
+        form {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 350px;
+        }
 
-function MyComponent() {
-  const { refs, floatingStyles } = useFloating();
+        /* Heading Style */
+        h4,h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #ffd700;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-  return (
-    <>
-      <div ref={refs.setReference} />
-      <div ref={refs.setFloating} style={floatingStyles} />
-    </>
-  );
-}
+        /* Input Fields */
+        input[type="text"] {
+            padding: 12px;
+            width: 100%;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            color: #333;
+        }
+
+        /* Submit Button */
+        input[type="submit"] {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ffd700;
+            color: #333;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <form action="arm.jsp" method="post">
+        <h1>Armstrong number Checker</h1>
+        <input type="text" name="number" placeholder="Enter a number">
+        <input type="submit" value="Check">
+    </form>
+</body>
+</html>
 ```
 
-## Word Highlighting
+## This is arm.jsp and file name should be arm.jsp
 
-Draw attention to a particular word or series of characters.
+```js
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Armstrong Number Checker Result</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        h4, p {
+            text-align: center;
+        }
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0); /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .armstrong {
+            color: green;
+            font-weight: bold;
+        }
+        .not-armstrong {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
 
-```js /floatingStyles/
-import { useFloating } from "@floating-ui/react";
+<div id="resultModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h4>Result:</h4>
+        <%
+        int number = Integer.parseInt(request.getParameter("number"));
+        int originalNumber = number;
+        int numberOfDigits = String.valueOf(number).length();
+        int sum = 0;
+        while (number > 0) {
+            int digit = number % 10;
+            sum += Math.pow(digit, numberOfDigits);
+            number /= 10;
+        }
+        if (sum == originalNumber) {
+        %>
+        <p class="armstrong">The given number <%= originalNumber %> is an Armstrong number.</p>
+        <%
+        } else {
+        %>
+        <p class="not-armstrong">The given number <%= originalNumber %> is not an Armstrong number.</p>
+        <%
+        }
+        %>
+    </div>
+</div>
 
-function MyComponent() {
-  const { refs, floatingStyles } = useFloating();
+<script>
+    // Get the modal
+    var modal = document.getElementById("resultModal");
 
-  return (
-    <>
-      <div ref={refs.setReference} />
-      <div ref={refs.setFloating} style={floatingStyles} />
-    </>
-  );
-}
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the page loads, open the modal
+    window.onload = function() {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+        window.location.href = "index.html"; // Redirect to the index page after closing
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            window.location.href = "index.html"; // Redirect to the index page after closing
+        }
+    }
+</script>
+
+</body>
+</html>
+
 ```
 
-## ANSI Highlighting
+## Some of the armstrong numbers are
 
-```ansi
-[0;36m  vite v5.0.0[0;32m dev server running at:[0m
+```bash
+1, 2, 3, 4, 5, 6, 7, 8, 9, 153
 
-  > Local: [0;36mhttp://localhost:[0;36;1m3000[0;36m/[0m
-  > Network: [0;2muse `--host` to expose[0m
-
-  [0;36mready in 125ms.[0m
-
-[0;2m8:38:02 PM[0m [0;36;1m[vite][0m [0;32mhmr update [0;2m/src/App.jsx
-```
-
-Inline ANSI: `> Local: [0;36mhttp://localhost:[0;36;1m3000[0;36m/[0m{:ansi}`
-
----
-
-### Kitchen Sink Meta Strings
-
-```js showLineNumbers {2-4} title="isEven.js" /console/ caption="Im a caption"
-function isEven(number) {
-  if (number === 1) {
-    return false;
-  } else if (number === 2) {
-    return true;
-  } else if (number === 3) {
-    return false;
-  } else if (number === 4) {
-    return true;
-  } else if (number === 5) {
-    return false;
-  } else if (number === 6) {
-    return true;
-  } else if (number === 7) {
-    return false;
-  } else if (number === 8) {
-    return true;
-  } else if (number === 9) {
-    return false;
-  } else if (number === 10) {
-    return true;
-  } else {
-    return "Number is not between 1 and 10.";
-  }
-}
-
-// Example usage:
-console.log(isEven(3)); // Should return false
-console.log(isEven(4)); // Should return true
-console.log(isEven(11)); // Should return "Number is not between 1 and 10."
 ```

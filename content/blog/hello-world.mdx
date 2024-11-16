@@ -1,15 +1,113 @@
 ---
-title: Hello World
-description: This is our first blog post. Really cool
-date: 2024-03-06
-tags: ["code", "blog"]
+title: Starting 1 codes
+description: Java Exception Handling codes 
+date: 2024-03-04
+tags: ["code", "rehype pretty", "mdx"]
 published: true
 ---
 
-<Callout type="warning">Hello I am a callout</Callout>
+[`rehype-pretty-code`](https://github.com/atomiks/rehype-pretty-code) is a Rehype plugin powered by the
+[`shiki`](https://github.com/shikijs/shiki) syntax highlighter that provides beautiful code blocks for Markdown or MDX. It works on both the server at build-time (avoiding runtime syntax highlighting) and on the client for dynamic highlighting.
 
-# Hello World
+## Editor-Grade Highlighting
 
-Welcome to my blog `inline code`
+<span className="mix-blend-plus-lighter text-zinc-400/80">
+  Follow below is the code for given question
+</span>
 
-### Header 3
+## Line Numbers and Line Highlighting
+
+PAN is a ten -digit unique alphanumeric number issued by the Income Tax Department of 
+India. The structure of the first five characters of PAN, the first three characters represent the 
+alphabetic series running from AAA to ZZZ and the fourth character of PAN represents the 
+status of the PAN holder it will contain only “A”, “B”, “C”, “E”, “G”, “H”, “I”, “K”, “N” & 
+“Q”. Fifth character of PAN represents the first character of the PAN holder's Father’s first 
+name/surname in case of an individual. In case of non-individual PAN holder’s fifth 
+character represents the last character of PAN holder's name. Get the input from the user, if 
+all the cases are valid for PAN number’s first five values, then print “This might be valid 
+PAN number” otherwise throw appropriate user defined exceptions (alphabetic series, fourth 
+and fifth character input.)
+
+
+
+```js
+import java.util.Scanner;
+import java.util.regex.*;
+
+// Custom exception class for PAN validation errors
+class Myexception extends Exception {
+    public Myexception(String s) {
+        super(s);
+    }
+}
+
+public class pan_validation {
+    public static void main(String[] args) throws Myexception {
+        // Prompt the user to enter the PAN number
+        System.out.println("Enter the PAN number to validate:");
+        Scanner sc = new Scanner(System.in);
+        String pan_number = sc.next().toUpperCase(); // Convert the input to uppercase for consistency
+
+        // Prompt the user to specify if they registered for PAN as an individual
+        System.out.println("Please enter yes if you registered for pan as individual:");
+        String yes_or_no = sc.next();
+        String first_name = "";
+
+        // Determine the first name based on the user's registration type
+        if (yes_or_no.equals("yes")) {
+            System.out.println("Please enter your Surname:");
+            first_name = sc.next().toUpperCase();
+        } else {
+            System.out.println("Please Enter your father's first name:");
+            first_name = sc.next().toUpperCase();
+        }
+        sc.close();
+
+        // Extract specific parts of the PAN number for validation
+        String first_three_characters = pan_number.substring(0, 3);
+        String six_to_eight_chars = pan_number.substring(6, 9);
+        char fourth_character = pan_number.charAt(3);
+        char last_character = pan_number.charAt(pan_number.length() - 1);
+
+        // Validate the length of the PAN number
+        if (pan_number.length() != 10) {
+            throw new Myexception("PAN number should be exactly 10 characters. Please enter the PAN number again.");
+        }
+        // Validate the first three characters (alphabetic series from A to Z)
+        else if (!Pattern.matches("[A-Z]{3}", first_three_characters)) {
+            throw new Myexception("The first three characters should be an alphabetic series running from A to Z.");
+        }
+        // Validate the fourth character (status identifier)
+        else if (!Pattern.matches("[ABCEGHIKNPQ]", Character.toString(fourth_character))) {
+            throw new Myexception("The fourth character representing status should be in the set ABCEGHIKNQ.");
+        }
+        // Validate the fifth character (matching the first character of the provided name)
+        else if (pan_number.charAt(4) != first_name.charAt(0)) {
+            throw new Myexception("The fifth character should match the first character of your father's name or surname.");
+        }
+        // Validate the sixth to eighth characters (numeric series from 0 to 9)
+        else if (!Pattern.matches("[0-9]{3}", six_to_eight_chars)) {
+            throw new Myexception("The 6, 7, and 8 characters should be numbers from 0-9.");
+        }
+        // Validate the last character (alphabet between A to Z)
+        else if (!Pattern.matches("[A-Z]{1}", Character.toString(last_character))) {
+            throw new Myexception("Last character should be an alphabet between A-Z.");
+        }
+        // If all validations pass, print a success message
+        else {
+            System.out.println("This Might be a Valid PAN number.");
+        }
+    }
+}
+
+```
+
+## Word Highlighting
+
+To  run the code in the above code block, you can use the following command:
+
+```bash
+javac pan_validation.java
+java pan_validation
+```
+

@@ -1,193 +1,112 @@
 ---
-title: Github Flavoured Markdown CheatSheet
-description: A markdown cheat sheet for GFM
-date: 2024-03-03
+title: "String Manipulation in JSP"
+description: This code code performs string manipulation in JSP like changing case, trimming, and replacing characters.
+date: 2024-03-01
+tags: ["code", "react", "props"]
 published: true
 ---
 
-# Introduction
+# File name : Index.html
+  
+  ```html
+  <!DOCTYPE html>
+<html>
+<head>
+    <title>String Manipulation App</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+    <div style="width: 50%; margin: 0 auto; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);">
+        <h2 style="text-align: center; color: #333;">String Manipulation</h2>
+        <form action="manipulate" method="post">
+            <label for="string1" style="display: block; margin-top: 10px; color: #555;">Enter First String:</label>
+            <input type="text" id="string1" name="string1" required style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"><br>
 
-The following markdown cheatsheet is adapted from: https://guides.github.com/features/mastering-markdown/
+            <label for="string2" style="display: block; margin-top: 10px; color: #555;">Enter Second String:</label>
+            <input type="text" id="string2" name="string2" required style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"><br>
 
-# What is Markdown?
+            <input type="submit" value="Submit" style="width: 100%; padding: 10px; margin-top: 20px; border-radius: 5px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
+        </form>
+    </div>
+</body>
+</html>
 
-Markdown is a way to style text on the web. You control the display of the document; formatting words as bold or italic, adding images, and creating lists are just a few of the things we can do with Markdown. Mostly, Markdown is just regular text with a few non-alphabetic characters thrown in, like `#` or `*`.
+  ```
 
-# Syntax guide
+## File: Result.jsp
 
-Here’s an overview of Markdown syntax that you can use anywhere on GitHub.com or in your own text files.
+```jsp
+<%-- 
+    Document   : result
+    Created on : 22 Aug 2024, 10:13:36 pm
+    Author     : Sandeepgarikapati
+--%>
 
-## Headers
-
-```mdx
-# This is a h1 tag
-
-## This is a h2 tag
-
-#### This is a h4 tag
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>String Manipulation Results</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+    <div style="width: 50%; margin: 0 auto; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);">
+        <h2 style="text-align: center; color: #333;">Manipulation Results</h2>
+        <p><strong>Joined Strings:</strong> ${joined}</p>
+        <p><strong>String after Removal:</strong> ${removed}</p>
+        <p><strong>String after Replacement:</strong> ${replaced}</p>
+        <p><strong>Uppercase String:</strong> ${upperCase}</p>
+        <p><strong>Reversed String:</strong> ${reversed}</p>
+    </div>
+</body>
+</html>
 ```
 
-# This is a h1 tag
+## File : ServletException.java
 
-## This is a h2 tag
+```java
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
+package StringManipulationServlet;
 
-#### This is a h4 tag
 
-## Emphasis
+import jakarta.servlet.RequestDispatcher;
+import java.io.IOException;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-```mdx
-_This text will be italic_
+@WebServlet("/manipulate")
+public class StringManipulationServlet extends HttpServlet {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
 
-**This text will be bold**
+        String string1 = request.getParameter("string1");
+        String string2 = request.getParameter("string2");
 
-_You **can** combine them_
+        // String Manipulations
+        String joined = string1 + string2;
+        String removed = string1.replaceAll(string2, "");
+        String replaced = string1.replace('a', '@'); // Example replacement
+        String upperCase = string1.toUpperCase();
+        String reversed = new StringBuilder(string1).reverse().toString();
+
+        request.setAttribute("joined", joined);
+        request.setAttribute("removed", removed);
+        request.setAttribute("replaced", replaced);
+        request.setAttribute("upperCase", upperCase);
+        request.setAttribute("reversed", reversed);
+
+        RequestDispatcher rd = request.getRequestDispatcher("/result.jsp");
+        rd.forward(request, response);
+    }
+
 ```
 
-_This text will be italic_
+## Example Images
 
-**This text will be bold**
-
-_You **can** combine them_
-
-## Lists
-
-### Unordered
-
-```mdx
-- Item 1
-- Item 2
-  - Item 2a
-  - Item 2b
-```
-
-- Item 1
-- Item 2
-  - Item 2a
-  - Item 2b
-
-### Ordered
-
-```mdx
-1. Item 1
-1. Item 2
-1. Item 3
-   1. Item 3a
-   1. Item 3b
-```
-
-1. Item 1
-1. Item 2
-1. Item 3
-   1. Item 3a
-   1. Item 3b
-
-## Images
-
-```mdx
-![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
-Format: ![Alt Text](url)
-```
-
-![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
-
-## Links
-
-```mdx
-http://github.com - automatic!
-[GitHub](http://github.com)
-```
-
-http://github.com - automatic!
-[GitHub](http://github.com)
-
-## Blockquotes
-
-```mdx
-As Kanye West said:
-
-> We're living the future so
-> the present is our past.
-```
-
-As Kanye West said:
-
-> We're living the future so
-> the present is our past.
-
-## Inline code
-
-```mdx
-I think you should use an
-`<addr>` element here instead.
-```
-
-I think you should use an
-`<addr>` element here instead.
-
-## Syntax highlighting
-
-Here’s an example of how you can use syntax highlighting with [GitHub Flavored Markdown](https://help.github.com/articles/basic-writing-and-formatting-syntax/):
-
-````mdx
-```js:fancyAlert.js
-function fancyAlert(arg) {
-  if (arg) {
-    $.facebox({ div: '#foo' })
-  }
-}
-```
-````
-
-And here's how it looks - nicely colored with styled code titles!
-
-```jsx
-function fancyAlert(arg) {
-  if (arg) {
-    $.facebox({ div: "#foo" });
-  }
-}
-```
-
-## Footnotes
-
-```mdx
-Here is a simple footnote[^1]. With some additional text after it.
-
-[^1]: My reference.
-```
-
-Here is a simple footnote[^1]. With some additional text after it.
-
-[^1]: My reference.
-
-## Task Lists
-
-```mdx
-- [x] list syntax required (any unordered or ordered list supported)
-- [x] this is a complete item
-- [ ] this is an incomplete item
-```
-
-- [x] list syntax required (any unordered or ordered list supported)
-- [x] this is a complete item
-- [ ] this is an incomplete item
-
-## Tables
-
-You can create tables by assembling a list of words and dividing them with hyphens `-` (for the first row), and then separating each column with a pipe `|`:
-
-```mdx
-| First Header                | Second Header                |
-| --------------------------- | ---------------------------- |
-| Content from cell 1         | Content from cell 2          |
-| Content in the first column | Content in the second column |
-```
-
-| First Header                | Second Header                |
-| --------------------------- | ---------------------------- |
-| Content from cell 1         | Content from cell 2          |
-| Content in the first column | Content in the second column |
-
-## Strikethrough
-
-Any word wrapped with two tildes (like `~~this~~`) will appear ~~crossed out~~.
+![String Manipulation](screenshot.png)
+![Result Page](string2.png)
