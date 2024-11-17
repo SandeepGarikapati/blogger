@@ -1,46 +1,70 @@
 ---
-title: "The Lifecycle of a React Component, As Told by Cats"
-description: A whimsical exploration of the React component lifecycle, with each stage humorously explained through the behavior of cats. Perfect for developers looking to understand lifecycle methods in a more relatable and entertaining way.
+title: "Sample HTML Website"
+description: Sample HTML website for testing
 date: 2024-02-25
 published: true
 ---
 
-# The Lifecycle of a React Component, Explained by Cats
+## Index.html
 
-Every React component undergoes a series of events from birth to death, known as its lifecycle. Just as cats have their unique behaviors, each phase of a component's lifecycle can be likened to the life stages of our feline friends.
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>String Concatenation</title>
+</head>
+<body>
+  <h1>Enter Two Strings</h1>
+  <form action="result.html" method="GET">
+    <label for="string1">String 1:</label>
+    <input type="text" id="string1" name="string1" required><br><br>
+    
+    <label for="string2">String 2:</label>
+    <input type="text" id="string2" name="string2" required><br><br>
+    
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>
 
-## Mounting: The Curious Kitten
-
-The mounting phase is when our component is born into the DOM world. Imagine a kitten opening its eyes for the first time, exploring its surroundings with awe. This is your component, freshly rendered and ready to interact with the user.
-
-```jsx
-componentDidMount() {
-  console.log('The component has mounted, much like a cat finding its favorite sunny spot.');
-}
 ```
 
-## Updating: The Playful Cat
+## Result.html
 
-As props and state change, our component updates. This is akin to a cat in its playful phase, chasing after laser pointers or pouncing on yarn. Every update re-renders the component, making it respond to user interactions and data changes dynamically.
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Concatenated Result</title>
+</head>
+<body>
+  <h1>Concatenated Strings</h1>
+  <p id="result"></p>
 
-```jsx
-componentDidUpdate(prevProps, prevState) {
-  console.log('The component has updated, chasing after new props and state like a cat after a laser dot.');
-}
+  <script>
+    // Function to get query parameters
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    // Get the two strings from the URL query parameters
+    const string1 = getQueryParam('string1');
+    const string2 = getQueryParam('string2');
+
+    // Concatenate the strings and display the result
+    if (string1 && string2) {
+      const concatenated = string1 + " " + string2;
+      document.getElementById("result").textContent = "Concatenated result: " + concatenated;
+    } else {
+      document.getElementById("result").textContent = "Please enter valid strings.";
+    }
+  </script>
+</body>
+</html>
+
 ```
-
-## Unmounting: The Lazy Cat
-
-Finally, when the component is no longer needed and is removed from the DOM, it's like a cat losing interest in its toy and sauntering off for a nap. This phase cleans up any lingering effects or subscriptions the component may have.
-
-```jsx
-componentWillUnmount() {
-  console.log('The component will unmount, much like a cat wandering off to find a quiet place to rest.');
-}
-```
-
-## Conclusion: Nine Lives of React Components
-
-Just as cats live their lives in phases, React components have their lifecycle. Understanding these phases helps you better manage your components, ensuring they perform efficiently and gracefully throughout their lifecycle.
-
-Remember, the key to mastering React is much like understanding cats: it requires patience, observation, and a bit of love for the craft. Happy coding, and may your components live as richly and interestingly as our feline overlords!
