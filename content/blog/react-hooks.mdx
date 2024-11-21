@@ -21,38 +21,68 @@ published: true
 
 
 
-## The Essential Fishing Gear
+## Basic Sql queries
 
-Before we set sail, let's ensure we have all the necessary gear:
+```sql
+CREATE DATABASE hospital_db;
 
-- **useState:** The worm that tempts your components to the surface.
-- **useEffect:** The lure that attracts side-effects and keeps them at bay.
-- **useContext:** The net that gathers global states together, making it easier to share across your component sea.
+USE hospital_db;
 
-## Setting Sail: Your First Catch
+CREATE TABLE patients (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    age INT,
+    gender VARCHAR(10),
+    ailment VARCHAR(200)
+);
 
-With our gear ready, it's time to set sail into the React sea. Here's how to make your first catch:
+INSERT INTO patients (name, age, gender, ailment)
+VALUES
+    ('John Doe', 45, 'Male', 'Hypertension'),
+    ('Jane Smith', 30, 'Female', 'Asthma'),
+    ('Alice Johnson', 60, 'Female', 'Diabetes'),
+    ('Bob Brown', 50, 'Male', 'Arthritis'),
+    ('Carol Davis', 35, 'Female', 'Migraine');
 
-1. **Bait your hook with useState:** Begin by choosing the right worm. `useState` allows you to add state to your functional components, making them more dynamic and responsive.
 
-```jsx
-const [fish, setFish] = useState("🐟");
+
+UPDATE patients
+SET age = 46
+WHERE name = 'John Doe';
+
+
+UPDATE patients
+SET ailment = 'Hypertension, Cholesterol'
+WHERE name = 'Bob Brown';
+
+
+UPDATE patients
+SET gender = 'Non-binary'
+WHERE name = 'Alice Johnson';
+
+
+UPDATE patients
+SET age = 55, ailment = 'Arthritis, Osteoporosis'
+WHERE name = 'Carol Davis';
+
+
+UPDATE patients
+SET name = 'Jonathan Doe'
+WHERE name = 'John Doe';
+
+
+DELETE FROM patients
+WHERE name = 'John Doe';
+
+
+DELETE FROM patients
+WHERE id = 3;
+
+
+DELETE FROM patients
+WHERE ailment = 'Asthma';
+
 ```
 
-2. **Attract with useEffect:** Now, use `useEffect` as your lure. This Hook lets you perform side effects in your components, such as fetching data or subscribing to services. It's like casting your line into the water and waiting for a bite.
 
-```jsx
-useEffect(() => {
-  console.log(`You've caught ${fish}!`);
-}, [fish]);
-```
 
-3. **Gather with useContext:** Finally, use `useContext` as your net. This Hook lets you share state across many components without prop drilling. It's like gathering all your catches in one net for a bountiful harvest.
-
-## The Catch of the Day
-
-Congratulations! You've made your first catch in the React sea. But remember, the sea is vast, and there are many more components and hooks to explore. Each project is a new fishing trip, with its challenges and rewards.
-
-Remember to release any components back into the sea if you don't need them. Keeping your application's waters clean and sustainable is key to a healthy React ecosystem.
-
-Happy fishing in the React sea!

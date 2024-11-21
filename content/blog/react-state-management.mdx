@@ -1,53 +1,245 @@
 ---
-title: "React State Management: An Epic Tale of Love, Loss, and Redux"
+title: "Hospital Management System using JSP" 
 description: Embark on a dramatic journey through the realm of React state management. Witness the love triangles, betrayals, and heartaches that components face as they navigate the complex world of state management, with a special appearance by Redux.
 date: 2024-02-24
 published: true
 ---
 
-# React State Management: A Soap Opera
+# Directory Structure
+```bash
+HospitalManagementSystem/
+│
+├── index.jsp
+├── addPatient.jsp
+├── viewPatients.jsp
+├── deletePatient.jsp
+├── dbConnection.jsp
+└── WEB-INF/
+    └── web.xml
 
-In the grand drama of React development, the saga of state management is one filled with love, jealousy, and occasional heartbreak. This tale unfolds in the realm of an application, where components and states are intertwined in a complex dance of functionality and performance.
-
-## The Love Affair Between Components and State
-
-Our story begins with a young component, fresh and eager, falling deeply in love with a beautiful piece of state. This state, so pristine and full of potential, promises to bring the best out of our component, making it dynamic and interactive.
-
-```jsx
-const [love, setLove] = useState("undeniable");
 ```
 
-## The Jealous Sibling: Prop Drilling
+# Database setup
+```sql
+CREATE DATABASE hospital_db;
 
-But as in any good soap opera, there's a twist. A sibling component, envious of the love affair, desires the state for itself. This leads to the dark practice of prop drilling, passing the beloved state down through layers of components, causing confusion and chaos.
+USE hospital_db;
 
-```jsx
-const DramaComponent = ({ love }) => {
-  return <div>{`The love is now shared: ${love}`}</div>;
-};
+CREATE TABLE patients (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    age INT,
+    gender VARCHAR(10),
+    ailment VARCHAR(200)
+);
+
+INSERT INTO patients (name, age, gender, ailment)
+VALUES
+    ('John Doe', 45, 'Male', 'Hypertension'),
+    ('Jane Smith', 30, 'Female', 'Asthma'),
+    ('Alice Johnson', 60, 'Female', 'Diabetes'),
+    ('Bob Brown', 50, 'Male', 'Arthritis'),
+    ('Carol Davis', 35, 'Female', 'Migraine');
+
+
+
+UPDATE patients
+SET age = 46
+WHERE name = 'John Doe';
+
+
+UPDATE patients
+SET ailment = 'Hypertension, Cholesterol'
+WHERE name = 'Bob Brown';
+
+
+UPDATE patients
+SET gender = 'Non-binary'
+WHERE name = 'Alice Johnson';
+
+
+UPDATE patients
+SET age = 55, ailment = 'Arthritis, Osteoporosis'
+WHERE name = 'Carol Davis';
+
+
+UPDATE patients
+SET name = 'Jonathan Doe'
+WHERE name = 'John Doe';
+
+
+DELETE FROM patients
+WHERE name = 'John Doe';
+
+
+DELETE FROM patients
+WHERE id = 3;
+
+
+DELETE FROM patients
+WHERE ailment = 'Asthma';
+
 ```
 
-## The Arrival of Redux: A New Hope
+# File name: index.jsp
+```jsp
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hospital Management System</title>
+</head>
+<body>
+    <h1>Hospital Management System</h1>
+    <a href="addPatient.jsp">Add Patient</a> | 
+    <a href="viewPatients.jsp">View Patients</a>
+</body>
+</html>
 
-Just when all seems lost, a new character enters the scene: Redux. With its powers of global state management, Redux promises to end the jealousy and confusion, allowing state to be shared harmoniously among all components.
-
-```jsx
-const loveReducer = (state = "undeniable", action) => {
-  switch (action.type) {
-    case "SHARE_LOVE":
-      return action.love;
-    default:
-      return state;
-  }
-};
 ```
 
-## The Dramatic Finale: State Reconciliation
+# File name: addPatient.jsp
+```jsp
+<%@ include file="dbConnection.jsp" %>
+<%@ page import="java.sql.*" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Patient</title>
+</head>
+<body>
+    <h1>Add Patient</h1>
+    <form method="post">
+        Name: <input type="text" name="name" required><br>
+        Age: <input type="number" name="age" required><br>
+        Gender: 
+        <select name="gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select><br>
+        Ailment: <textarea name="ailment" required></textarea><br>
+        <button type="submit">Add Patient</button>
+    </form>
 
-In the dramatic climax, the components learn to embrace Redux, sharing state seamlessly and ending the cycle of jealousy and prop drilling. Love and state are now distributed equally, bringing peace to the application realm.
+    <% 
+        if (request.getMethod().equalsIgnoreCase("POST")) {
+            String name = request.getParameter("name");
+            int age = Integer.parseInt(request.getParameter("age"));
+            String gender = request.getParameter("gender");
+            String ailment = request.getParameter("ailment");
 
-## Epilogue: The Moral of the Story
+            try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+                String sql = "INSERT INTO patients (name, age, gender, ailment) VALUES (?, ?, ?, ?)";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setString(1, name);
+                stmt.setInt(2, age);
+                stmt.setString(3, gender);
+                stmt.setString(4, ailment);
+                stmt.executeUpdate();
+                out.println("<p>Patient added successfully!</p>");
+            } catch (SQLException e) {
+                out.println("<p>Error: " + e.getMessage() + "</p>");
+            }
+        }
+    %>
+</body>
+</html>
 
-As our tale concludes, we're reminded of the importance of proper state management in React applications. Whether through hooks, context, or Redux, managing state with care and precision ensures a harmonious relationship between components and their state.
+```
 
-Remember, dear developers, in the world of React, love (and state) conquers all. Happy coding!
+# File name: viewPatients.jsp
+```jsp
+<%@ include file="dbConnection.jsp" %>
+<%@ page import="java.sql.*" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Patients</title>
+</head>
+<body>
+    <h1>Patients List</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Ailment</th>
+            <th>Action</th>
+        </tr>
+        <%
+            try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT * FROM patients");
+                while (rs.next()) {
+        %>
+        <tr>
+            <td><%= rs.getInt("id") %></td>
+            <td><%= rs.getString("name") %></td>
+            <td><%= rs.getInt("age") %></td>
+            <td><%= rs.getString("gender") %></td>
+            <td><%= rs.getString("ailment") %></td>
+            <td><a href="deletePatient.jsp?id=<%= rs.getInt("id") %>">Delete</a></td>
+        </tr>
+        <% 
+                }
+            } catch (SQLException e) {
+                out.println("<p>Error: " + e.getMessage() + "</p>");
+            }
+        %>
+    </table>
+</body>
+</html>
+
+```
+
+# File name: deletePatient.jsp
+```jsp
+<%@ include file="dbConnection.jsp" %>
+<%@ page import="java.sql.*" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Patient</title>
+</head>
+<body>
+    <%
+        int id = Integer.parseInt(request.getParameter("id"));
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+            String sql = "DELETE FROM patients WHERE id=?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+            out.println("<p>Patient deleted successfully!</p>");
+        } catch (SQLException e) {
+            out.println("<p>Error: " + e.getMessage() + "</p>");
+        }
+    %>
+    <a href="viewPatients.jsp">Back to Patients List</a>
+</body>
+</html>
+```
+
+# File name: dbConnection.jsp
+```jsp
+<%
+    String DB_URL = "jdbc:mysql://localhost:3306/hospital_db";
+    String DB_USER = "root";
+    String DB_PASS = "your_password";
+
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+    } catch (ClassNotFoundException e) {
+        out.println("<p>Error loading database driver: " + e.getMessage() + "</p>");
+    }
+%>
+```
+
+# File name: web.xml
+```xml
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="3.0">
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>
+
+```

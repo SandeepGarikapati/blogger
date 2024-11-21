@@ -68,3 +68,835 @@ published: true
 </html>
 
 ```
+
+## Library management system
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Management System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f0f8ff; /* Light blue background */
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2a6478; /* Deep teal */
+    }
+
+    .form-container, .table-container {
+      margin: 20px auto;
+      max-width: 600px;
+      padding: 15px;
+      border: 2px solid #2a6478; /* Deep teal border */
+      border-radius: 8px;
+      background-color: #ffffff; /* White background */
+    }
+
+    .form-container {
+      margin-bottom: 60px; /* More space before the table */
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #2a6478;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      background-color: #4caf50; /* Green */
+      cursor: pointer;
+    }
+
+    button.delete {
+      background-color: #f44336; /* Red */
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px; /* Increased padding for better spacing */
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #2a6478; /* Deep teal */
+      color: #fff;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9; /* Light grey for alternate rows */
+    }
+
+    .update-row, .delete-row {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Library Management System</h1>
+
+  <!-- Insert/Update Form -->
+  <div class="form-container">
+    <h2>Insert/Update Book</h2>
+    <form id="bookForm">
+      <label for="title">Book Title</label>
+      <input type="text" id="title" name="title" required>
+
+      <label for="author">Author</label>
+      <input type="text" id="author" name="author" required>
+
+      <label for="isbn">Book ID</label>
+      <input type="text" id="isbn" name="isbn" required>
+
+      <button type="button" onclick="addOrUpdateBook()">Save</button>
+    </form>
+  </div>
+
+  <!-- Book Table -->
+  <div class="table-container">
+    <h2>Books List</h2>
+    <table id="booksTable">
+      <thead>
+        <tr>
+          <th>Book Title</th>
+          <th>Author</th>
+          <th>ISBN</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Records will be dynamically added here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    let editIndex = -1; // Index of the row being edited
+
+    function addOrUpdateBook() {
+      const title = document.getElementById("title").value;
+      const author = document.getElementById("author").value;
+      const isbn = document.getElementById("isbn").value;
+
+      const tableBody = document.getElementById("booksTable").querySelector("tbody");
+
+      if (editIndex === -1) {
+        // Add new record
+        const newRow = tableBody.insertRow();
+        newRow.innerHTML = `
+          <td>${title}</td>
+          <td>${author}</td>
+          <td>${isbn}</td>
+          <td class="update-row">
+            <button onclick="editBook(this)">Update</button>
+            <button class="delete" onclick="deleteBook(this)">Delete</button>
+          </td>
+        `;
+      } else {
+        // Update existing record
+        const row = tableBody.rows[editIndex];
+        row.cells[0].textContent = title;
+        row.cells[1].textContent = author;
+        row.cells[2].textContent = isbn;
+        editIndex = -1;
+      }
+
+      // Reset form
+      document.getElementById("bookForm").reset();
+    }
+
+    function editBook(button) {
+      const row = button.closest("tr");
+      editIndex = row.rowIndex - 1; // Adjust for the header row
+
+      // Populate form fields
+      document.getElementById("title").value = row.cells[0].textContent;
+      document.getElementById("author").value = row.cells[1].textContent;
+      document.getElementById("isbn").value = row.cells[2].textContent;
+    }
+
+    function deleteBook(button) {
+      const row = button.closest("tr");
+      row.remove();
+    }
+  </script>
+</body>
+</html>
+```
+
+## Student Management System rupa
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Management System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f7f7f7; /* Light grey background */
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #4a90e2; /* Blue */
+    }
+
+    .form-container, .table-container {
+      margin: 20px auto;
+      max-width: 600px;
+      padding: 15px;
+      border: 2px solid #4a90e2; /* Blue border */
+      border-radius: 8px;
+      background-color: #ffffff; /* White background */
+    }
+
+    .form-container {
+      margin-bottom: 60px; /* Space before the table */
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #4a90e2;
+    }
+
+    input[type="text"], input[type="number"], input[type="date"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      background-color: #4caf50; /* Green */
+      cursor: pointer;
+    }
+
+    button.delete {
+      background-color: #f44336; /* Red */
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px; /* Padding for better spacing */
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #4a90e2; /* Blue */
+      color: #fff;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9; /* Light grey for alternate rows */
+    }
+
+    .update-row, .delete-row {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Student Management System</h1>
+
+  <!-- Insert/Update Form -->
+  <div class="form-container">
+    <h2>Add/Update Student</h2>
+    <form id="studentForm">
+      <label for="id">Student ID</label>
+      <input type="number" id="id" name="id" placeholder="Enter student ID" required>
+
+      <label for="name">Student Name</label>
+      <input type="text" id="name" name="name" placeholder="Enter student's name" required>
+
+      <label for="mobile">Mobile Number</label>
+      <input type="text" id="mobile" name="mobile" placeholder="Enter mobile number" required>
+
+      <label for="dob">Date of Birth</label>
+      <input type="date" id="dob" name="dob" required>
+
+      <label for="department">Department</label>
+      <input type="text" id="department" name="department" placeholder="Enter department" required>
+
+      <label for="branch">Branch</label>
+      <input type="text" id="branch" name="branch" placeholder="Enter branch" required>
+
+      <button type="button" onclick="addOrUpdateStudent()">Save</button>
+    </form>
+  </div>
+
+  <!-- Student Table -->
+  <div class="table-container">
+    <h2>Students List</h2>
+    <table id="studentsTable">
+      <thead>
+        <tr>
+          <th>Student ID</th>
+          <th>Name</th>
+          <th>Mobile Number</th>
+          <th>DOB</th>
+          <th>Department</th>
+          <th>Branch</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Records will be dynamically added here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    let editIndex = -1; // Index of the row being edited
+
+    function addOrUpdateStudent() {
+      const id = document.getElementById("id").value;
+      const name = document.getElementById("name").value;
+      const mobile = document.getElementById("mobile").value;
+      const dob = document.getElementById("dob").value;
+      const department = document.getElementById("department").value;
+      const branch = document.getElementById("branch").value;
+
+      const tableBody = document.getElementById("studentsTable").querySelector("tbody");
+
+      if (editIndex === -1) {
+        // Add new record
+        const newRow = tableBody.insertRow();
+        newRow.innerHTML = `
+          <td>${id}</td>
+          <td>${name}</td>
+          <td>${mobile}</td>
+          <td>${dob}</td>
+          <td>${department}</td>
+          <td>${branch}</td>
+          <td class="update-row">
+            <button onclick="editStudent(this)">Update</button>
+            <button class="delete" onclick="deleteStudent(this)">Delete</button>
+          </td>
+        `;
+      } else {
+        // Update existing record
+        const row = tableBody.rows[editIndex];
+        row.cells[0].textContent = id;
+        row.cells[1].textContent = name;
+        row.cells[2].textContent = mobile;
+        row.cells[3].textContent = dob;
+        row.cells[4].textContent = department;
+        row.cells[5].textContent = branch;
+        editIndex = -1;
+      }
+
+      // Reset form
+      document.getElementById("studentForm").reset();
+    }
+
+    function editStudent(button) {
+      const row = button.closest("tr");
+      editIndex = row.rowIndex - 1; // Adjust for the header row
+
+      // Populate form fields
+      document.getElementById("id").value = row.cells[0].textContent;
+      document.getElementById("name").value = row.cells[1].textContent;
+      document.getElementById("mobile").value = row.cells[2].textContent;
+      document.getElementById("dob").value = row.cells[3].textContent;
+      document.getElementById("department").value = row.cells[4].textContent;
+      document.getElementById("branch").value = row.cells[5].textContent;
+    }
+
+    function deleteStudent(button) {
+      const row = button.closest("tr");
+      row.remove();
+    }
+  </script>
+</body>
+</html>
+```
+
+## Student Management Sandeep
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Management System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f7f7f7; /* Light grey background */
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #4a90e2; /* Blue */
+    }
+
+    .form-container, .table-container {
+      margin: 20px auto;
+      max-width: 600px;
+      padding: 15px;
+      border: 2px solid #4a90e2; /* Blue border */
+      border-radius: 8px;
+      background-color: #ffffff; /* White background */
+    }
+
+    .form-container {
+      margin-bottom: 60px; /* Space before the table */
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #4a90e2;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      background-color: #4caf50; /* Green */
+      cursor: pointer;
+    }
+
+    button.delete {
+      background-color: #f44336; /* Red */
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px; /* Padding for better spacing */
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #4a90e2; /* Blue */
+      color: #fff;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9; /* Light grey for alternate rows */
+    }
+
+    .update-row, .delete-row {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Student Management System</h1>
+
+  <!-- Insert/Update Form -->
+  <div class="form-container">
+    <h2>Add/Update Student</h2>
+    <form id="studentForm">
+      <label for="registerNumber">Register Number</label>
+      <input type="text" id="registerNumber" name="registerNumber" placeholder="Enter register number" required>
+
+      <label for="firstName">First Name</label>
+      <input type="text" id="firstName" name="firstName" placeholder="Enter first name" required>
+
+      <label for="lastName">Last Name</label>
+      <input type="text" id="lastName" name="lastName" placeholder="Enter last name" required>
+
+      <label for="department">Department</label>
+      <input type="text" id="department" name="department" placeholder="Enter department" required>
+
+      <button type="button" onclick="addOrUpdateStudent()">Save</button>
+    </form>
+  </div>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- Student Table -->
+  <div class="table-container">
+    <h2>Students List</h2>
+    <table id="studentsTable">
+      <thead>
+        <tr>
+          <th>Register Number</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Department</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Records will be dynamically added here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    let editIndex = -1; // Index of the row being edited
+
+    function addOrUpdateStudent() {
+      const registerNumber = document.getElementById("registerNumber").value;
+      const firstName = document.getElementById("firstName").value;
+      const lastName = document.getElementById("lastName").value;
+      const department = document.getElementById("department").value;
+
+      const tableBody = document.getElementById("studentsTable").querySelector("tbody");
+
+      if (editIndex === -1) {
+        // Add new record
+        const newRow = tableBody.insertRow();
+        newRow.innerHTML = `
+          <td>${registerNumber}</td>
+          <td>${firstName}</td>
+          <td>${lastName}</td>
+          <td>${department}</td>
+          <td class="update-row">
+            <button onclick="editStudent(this)">Update</button>
+            <button class="delete" onclick="deleteStudent(this)">Delete</button>
+          </td>
+        `;
+      } else {
+        // Update existing record
+        const row = tableBody.rows[editIndex];
+        row.cells[0].textContent = registerNumber;
+        row.cells[1].textContent = firstName;
+        row.cells[2].textContent = lastName;
+        row.cells[3].textContent = department;
+        editIndex = -1;
+      }
+
+      // Reset form
+      document.getElementById("studentForm").reset();
+    }
+
+    function editStudent(button) {
+      const row = button.closest("tr");
+      editIndex = row.rowIndex - 1; // Adjust for the header row
+
+      // Populate form fields
+      document.getElementById("registerNumber").value = row.cells[0].textContent;
+      document.getElementById("firstName").value = row.cells[1].textContent;
+      document.getElementById("lastName").value = row.cells[2].textContent;
+      document.getElementById("department").value = row.cells[3].textContent;
+    }
+
+    function deleteStudent(button) {
+      const row = button.closest("tr");
+      row.remove();
+    }
+  </script>
+</body>
+</html>
+```
+
+## Hospital Management System
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Management System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f7f7f7; /* Light grey background */
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #4a90e2; /* Blue */
+    }
+
+    .form-container, .table-container {
+      margin: 20px auto;
+      max-width: 600px;
+      padding: 15px;
+      border: 2px solid #4a90e2; /* Blue border */
+      border-radius: 8px;
+      background-color: #ffffff; /* White background */
+    }
+
+    .form-container {
+      margin-bottom: 60px; /* Space before the table */
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #4a90e2;
+    }
+
+    input[type="text"], input[type="number"], input[type="radio"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      background-color: #4caf50; /* Green */
+      cursor: pointer;
+    }
+
+    button.delete {
+      background-color: #f44336; /* Red */
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px; /* Padding for better spacing */
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #4a90e2; /* Blue */
+      color: #fff;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9; /* Light grey for alternate rows */
+    }
+
+    .update-row, .delete-row {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Hospital Management System</h1>
+
+  <!-- Insert/Update Form -->
+  <div class="form-container">
+    <h2>Add/Update Patient</h2>
+    <form id="patientForm">
+      <label for="patientId">Patient ID</label>
+      <input type="number" id="patientId" name="patientId" placeholder="Enter patient ID" required>
+
+      <label for="firstName">First Name</label>
+      <input type="text" id="firstName" name="firstName" placeholder="Enter first name" required>
+
+      <label for="lastName">Last Name</label>
+      <input type="text" id="lastName" name="lastName" placeholder="Enter last name" required>
+
+      <label for="age">Age</label>
+      <input type="number" id="age" name="age" placeholder="Enter age" required>
+
+      <label>Gender</label>
+      <label for="male">Male</label>
+      <input type="radio" id="male" name="gender" value="Male" required>
+      <label for="female">Female</label>
+      <input type="radio" id="female" name="gender" value="Female" required>
+
+      <label for="diagnosis">Diagnosis</label>
+      <input type="text" id="diagnosis" name="diagnosis" placeholder="Enter diagnosis" required>
+
+      <button type="button" onclick="addOrUpdatePatient()">Save</button>
+    </form>
+  </div>
+
+  <!-- Patient Table -->
+  <div class="table-container">
+    <h2>Patients List</h2>
+    <table id="patientsTable">
+      <thead>
+        <tr>
+          <th>Patient ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>Diagnosis</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Records will be dynamically added here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    let editIndex = -1; // Index of the row being edited
+
+    function addOrUpdatePatient() {
+      const patientId = document.getElementById("patientId").value;
+      const firstName = document.getElementById("firstName").value;
+      const lastName = document.getElementById("lastName").value;
+      const age = document.getElementById("age").value;
+      const gender = document.querySelector('input[name="gender"]:checked').value;
+      const diagnosis = document.getElementById("diagnosis").value;
+
+      const tableBody = document.getElementById("patientsTable").querySelector("tbody");
+
+      if (editIndex === -1) {
+        // Add new record
+        const newRow = tableBody.insertRow();
+        newRow.innerHTML = `
+          <td>${patientId}</td>
+          <td>${firstName}</td>
+          <td>${lastName}</td>
+          <td>${age}</td>
+          <td>${gender}</td>
+          <td>${diagnosis}</td>
+          <td class="update-row">
+            <button onclick="editPatient(this)">Update</button>
+            <button class="delete" onclick="deletePatient(this)">Delete</button>
+          </td>
+        `;
+      } else {
+        // Update existing record
+        const row = tableBody.rows[editIndex];
+        row.cells[0].textContent = patientId;
+        row.cells[1].textContent = firstName;
+        row.cells[2].textContent = lastName;
+        row.cells[3].textContent = age;
+        row.cells[4].textContent = gender;
+        row.cells[5].textContent = diagnosis;
+        editIndex = -1;
+      }
+
+      // Reset form
+      document.getElementById("patientForm").reset();
+    }
+
+    function editPatient(button) {
+      const row = button.closest("tr");
+      editIndex = row.rowIndex - 1; // Adjust for the header row
+
+      // Populate form fields
+      document.getElementById("patientId").value = row.cells[0].textContent;
+      document.getElementById("firstName").value = row.cells[1].textContent;
+      document.getElementById("lastName").value = row.cells[2].textContent;
+      document.getElementById("age").value = row.cells[3].textContent;
+      document.querySelector(input[name="gender"][value="${row.cells[4].textContent}"]).checked = true;
+      document.getElementById("diagnosis").value = row.cells[5].textContent;
+    }
+
+    function deletePatient(button) {
+      const row = button.closest("tr");
+      row.remove();
+    }
+  </script>
+</body>
+</html>
+```
