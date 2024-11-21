@@ -28,19 +28,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.entity.Student;
 import com.example.demo.repository.StudentRepository;
 
 @RestController
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 public class StudentControler {
 
     @Autowired
@@ -83,78 +77,6 @@ public class StudentControler {
     public void removeStudent(@PathVariable int id) {
         Student student = repo.findById(id).get();
         repo.delete(student);
-    }
-
-}
-
-```
-
-## Files Name: Student.java
-
-```java
-package com.example.demo.entity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "student")
-public class Student {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int rollNo;
-    @Column(name = "student_name")
-    private String name;
-    @Column(name="student_percentage")
-    private float percentage;
-    @Column(name="student_branch")
-    private String branch;
-
-    public Student() {
-        // TODO Auto-generated constructor stub
-    }
-
-
-    public Student(String name, float percentage, String branch) {
-        super();
-        this.name = name;
-        this.percentage = percentage;
-        this.branch = branch;
-    }
-
-
-    public int getRollNo() {
-        return rollNo;
-    }
-    public void setRollNo(int rollNo) {
-        this.rollNo = rollNo;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public float getPercentage() {
-        return percentage;
-    }
-    public void setPercentage(float percentage) {
-        this.percentage = percentage;
-    }
-    public String getBranch() {
-        return branch;
-    }
-    public void setBranch(String branch) {
-        this.branch = branch;
-    }
-    @Override
-    public String toString() {
-        return "Student [rollNo=" + rollNo + ", name=" + name + ", percentage=" + percentage + ", branch=" + branch
-                + "]";
     }
 
 }
@@ -259,6 +181,184 @@ spring.jpa.show-sql = true
 	</build>
 
 </project>
+
+```
+
+## For front end
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Student Management</h1>
+        
+        <!-- Add Student Form -->
+        <div class="form">
+            <h2>Add Student</h2>
+            <input type="text" id="addName" placeholder="Enter Name">
+            <input type="number" id="addPercentage" placeholder="Enter Percentage">
+            <button onclick="addStudent()">Add Student</button>
+        </div>
+
+        <!-- Get All Students -->
+        <div class="students">
+            <h2>All Students</h2>
+            <button onclick="getAllStudents()">Refresh</button>
+            <div id="studentsList"></div>
+        </div>
+
+        <!-- Update Student -->
+        <div class="form">
+            <h2>Update Student</h2>
+            <input type="number" id="updateId" placeholder="Enter Student ID">
+            <button onclick="updateStudent()">Update to Default (Harshi, 92%)</button>
+        </div>
+
+        <!-- Delete Student -->
+        <div class="form">
+            <h2>Delete Student</h2>
+            <input type="number" id="deleteId" placeholder="Enter Student ID">
+            <button onclick="deleteStudent()">Delete Student</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+```
+
+## CSS File
+```css
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    color: #333;
+}
+
+.form {
+    margin-bottom: 20px;
+}
+
+input {
+    margin: 10px 0;
+    padding: 10px;
+    width: 80%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+#studentsList {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+```
+
+## Javascript File
+```javascript
+const API_BASE_URL = "http://localhost:8080";
+
+// Get All Students
+function getAllStudents() {
+    fetch(`${API_BASE_URL}/students`)
+        .then(response => response.json())
+        .then(data => {
+            const studentsList = document.getElementById("studentsList");
+            studentsList.innerHTML = "";
+
+            if (data.length === 0) {
+                studentsList.innerHTML = "<p>No students found.</p>";
+            } else {
+                data.forEach(student => {
+                    const studentDiv = document.createElement("div");
+                    studentDiv.textContent = `ID: ${student.rollNo}, Name: ${student.name}, Percentage: ${student.percentage}`;
+                    studentsList.appendChild(studentDiv);
+                });
+            }
+        })
+        .catch(error => console.error("Error fetching students:", error));
+}
+
+// Add Student
+function addStudent() {
+    const name = document.getElementById("addName").value;
+    const percentage = document.getElementById("addPercentage").value;
+
+    fetch(`${API_BASE_URL}/student/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, percentage }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert("Student added successfully!");
+            getAllStudents();
+        })
+        .catch(error => console.error("Error adding student:", error));
+}
+
+// Update Student
+function updateStudent() {
+    const id = document.getElementById("updateId").value;
+
+    fetch(`${API_BASE_URL}/student/update/${id}`, {
+        method: "PUT",
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert("Student updated successfully!");
+            getAllStudents();
+        })
+        .catch(error => console.error("Error updating student:", error));
+}
+
+// Delete Student
+function deleteStudent() {
+    const id = document.getElementById("deleteId").value;
+
+    fetch(`${API_BASE_URL}/student/delete/${id}`, {
+        method: "DELETE",
+    })
+        .then(() => {
+            alert("Student deleted successfully!");
+            getAllStudents();
+        })
+        .catch(error => console.error("Error deleting student:", error));
+}
 
 ```
 
