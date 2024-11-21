@@ -1,5 +1,5 @@
 ---
-title: Starting 1 codes
+title: Exceptional Handling codes
 description: Java Exception Handling codes 
 date: 2024-03-04
 tags: ["code", "rehype pretty", "mdx"]
@@ -102,7 +102,6 @@ public class pan_validation {
 
 ```
 
-## Word Highlighting
 
 To  run the code in the above code block, you can use the following command:
 
@@ -111,3 +110,99 @@ javac pan_validation.java
 java pan_validation
 ```
 
+
+## Library codes
+
+A library management system requires users to register for a library card using their 
+full name, date of birth, and a unique membership ID. The username for the library 
+card is generated using the first letter of their first name, followed by their full last 
+name, and ending with the last four digits of their membership ID. If any of the 
+required fields are missing or invalid (for example, if the date of birth is not provided 
+or the membership ID is too short), throw a user -defined exception with an 
+appropriate message like "Invalid library card registration criteria not met.” (8 
+Marks)
+
+
+## code
+
+```java
+// Custom Exception Class
+class LibraryCardException extends Exception {
+    public LibraryCardException(String message) {
+        super(message);
+    }
+}
+
+// LibraryCard Class
+class LibraryCard {
+    private String firstName;
+    private String lastName;
+    private String dateOfBirth;
+    private String membershipID;
+    private String username;
+
+    // Constructor
+    public LibraryCard(String firstName, String lastName, String dateOfBirth, String membershipID) throws LibraryCardException {
+        if (firstName == null || firstName.isEmpty() || lastName == null || lastName.isEmpty() || 
+            dateOfBirth == null || dateOfBirth.isEmpty() || membershipID == null || membershipID.length() < 6) {
+            throw new LibraryCardException("Invalid library card registration criteria not met.");
+        }
+
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.membershipID = membershipID;
+
+        // Generate username
+        this.username = generateUsername();
+    }
+
+    // Generate the username as per the rules
+    private String generateUsername() {
+        // First letter of the first name + full last name + last 4 digits of membership ID
+        String firstLetter = String.valueOf(firstName.charAt(0)).toLowerCase();
+        String last4Digits = membershipID.substring(membershipID.length() - 4);
+        return firstLetter + lastName.toLowerCase() + last4Digits;
+    }
+
+    // Getter for username
+    public String getUsername() {
+        return username;
+    }
+
+    // Display Library Card details
+    public void displayCardDetails() {
+        System.out.println("Library Card Details:");
+        System.out.println("Name: " + firstName + " " + lastName);
+        System.out.println("Date of Birth: " + dateOfBirth);
+        System.out.println("Membership ID: " + membershipID);
+        System.out.println("Username: " + username);
+    }
+}
+
+// Main Class
+public class LibraryManagementSystem {
+    public static void main(String[] args) {
+        try {
+            // Example 1: Valid Input
+            LibraryCard card1 = new LibraryCard("John", "Doe", "1990-01-01", "123456789012");
+            card1.displayCardDetails();
+
+            // Example 2: Invalid Input (missing or invalid field)
+            LibraryCard card2 = new LibraryCard("Jane", "", "1995-05-12", "12345");  // Invalid last name and membership ID
+            card2.displayCardDetails();
+
+        } catch (LibraryCardException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
+
+```
+
+To  run the code in the above code block, you can use the following command:
+
+```bash
+javac LibraryManagementSystem.java
+java LibraryManagementSystem
+```
